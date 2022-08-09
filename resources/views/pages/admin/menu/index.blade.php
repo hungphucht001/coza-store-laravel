@@ -43,10 +43,10 @@
                                     <span class="badge bg-{{$item->active == 1 ? 'success': 'danger'}}">{{$item->active == 1 ? 'Show': 'Hide'}}</span>
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-danger">
+                                    <a href="{{route('admin.menu.delete', $item->id)}}" class="btn btn-danger">
                                         <i class="bi bi-archive"></i>
                                     </a>
-                                    <a href="#" class="btn btn-primary">
+                                    <a href="{{route('admin.menu.edit', $item->id)}}" class="btn btn-primary">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>

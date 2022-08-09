@@ -29,7 +29,7 @@
                     Login with your data that you are given.
                 </p>
 
-                <form method="post" action="{{route('admin.post-login')}}">
+                <form method="post" action="{{route('post-login')}}">
                     <div class="form-group position-relative has-icon-left mb-4">
                         <input
                             name="username"

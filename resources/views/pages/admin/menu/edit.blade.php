@@ -21,7 +21,8 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <form class="form" data-parsley-validate action="{{route('admin.menu.store')}}" method="POST">
+                                @if($isExist != 1)
+                                    <form class="form" data-parsley-validate action="{{route('admin.menu.update', $menu->id)}}" method="POST">
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <div class="form-group mandatory">
@@ -34,7 +35,7 @@
                                                     class="form-control"
                                                     placeholder="First Name"
                                                     name="name"
-                                                    value="{{old('name')}}"
+                                                    value="{{$menu->name}}"
                                                     data-parsley-required="true"
                                                 />
                                             </div>
@@ -47,7 +48,7 @@
                                                 <select name="parent_id" class="form-select" id="basicSelect">
                                                     <option value="0">No Parent</option>
                                                     @foreach($parent_menu as $parent)
-                                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                                        <option  value="{{$parent->id}}"  {{$menu->parent_id == $parent->id ? 'selected' : ""}}>{{$parent->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -63,7 +64,7 @@
                                                     class="form-control"
                                                     placeholder="Description"
                                                     name="description"
-                                                    value="{{old('description')}}"
+                                                    value="{{$menu->description}}"
                                                     data-parsley-required="true"
                                                 />
                                             </div>
@@ -79,7 +80,7 @@
                                                     class="form-control"
                                                     placeholder="Content"
                                                     name="content"
-                                                    value="{{old('content')}}"
+                                                    value="{{$menu->content}}"
                                                     data-parsley-required="true"
                                                 />
                                             </div>
@@ -99,7 +100,7 @@
                                                             type="radio"
                                                             name="active"
                                                             value="1"
-                                                            {{old('status') == 1? "checked":""}}
+                                                            {{$menu->active == 1? "checked":""}}
                                                             id="flexRadioDefault1"
                                                         />
                                                         <label
@@ -115,7 +116,7 @@
                                                             type="radio"
                                                             name="active"
                                                             value="0"
-                                                            {{old('status') == 0? "checked":""}}
+                                                            {{$menu->active  == 0? "checked":""}}
                                                             id="flexRadioDefault2"
                                                         />
                                                         <label
@@ -145,8 +146,12 @@
                                             </button>
                                         </div>
                                     </div>
+                                        <input type="hidden" name="_method" value="PUT">
                                     @csrf
                                 </form>
+                                @else
+                                    I don't have any records!
+                                @endif
                             </div>
                         </div>
                     </div>

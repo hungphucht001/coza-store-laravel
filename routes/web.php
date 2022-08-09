@@ -31,17 +31,25 @@ Route::prefix('products')->name('products.')->group(function () {
     })->name('detail');
 });
 
-Route::prefix('admin')->name('admin.')->group(function(){
+
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'store'])->name('post-login');
+
+Route::middleware('authAdmin')->prefix('admin')->name('admin.')->group(function(){
+
     Route::get('/', function (){
-        if(\Illuminate\Support\Facades\Auth::check())
-            return view('pages.admin.dashboard');
-        return redirect()->route('admin.logout');
+        return view('pages.admin.dashboard');
     })->name('index');
-    Route::get('/login', [LoginController::class, 'index'])->name('login');
+
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::post('/login', [LoginController::class, 'store'])->name('post-login');
+
     Route::prefix('menu')->name('menu.')->group(function(){
         Route::get('/', [MenuController::class, 'index'])->name('index');
         Route::get('/add', [MenuController::class, 'create'])->name('add');
+        Route::post('/store', [MenuController::class, 'store'])->name('store');
+        Route::get('/delete/{id}', [MenuController::class, 'destroy'])->name('delete');
+        Route::get('/edit/{id}', [MenuController::class, 'show'])->name('edit');
+        Route::put('/edit/{id}', [MenuController::class, 'update'])->name('update');
     });
+
 });
