@@ -18,4 +18,7 @@ class Controller extends BaseController
     public function show ($id){
         return view('user',['user'=>"hello"]);
     }
+    public function index (){
+
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\Menu;
 
-use App\Http\Requests\Menu\CreateFormRequet;
+use App\Http\Requests\Menu\CreateFormRequest;
 use App\Models\Menu;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,12 +14,14 @@ class MenuService
     public function getParent(){
         return Menu::where('parent_id', 0)->get();
     }
-
+    public function getAll(){
+        return Menu::get();
+    }
     public function get($id){
         return Menu::find($id);
     }
 
-    public function create(CreateFormRequet $request){
+    public function create(CreateFormRequest $request){
         try {
             Menu::create([
                 'name' => (string)$request->input('name'),

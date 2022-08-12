@@ -22,8 +22,7 @@
                         <div class="card-content">
                             <div class="card-body">
                                 @if($isExist != 1)
-
-                                    <form class="form" data-parsley-validate action="{{route('admin.menu.update', $menu->id)}}" method="POST">
+                                    <form class="form" data-parsley-validate action="{{route('admin.products.update', $data->id)}}" method="POST">
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <div class="form-group mandatory">
@@ -36,7 +35,7 @@
                                                     class="form-control"
                                                     placeholder="First Name"
                                                     name="name"
-                                                    value="{{$menu->name}}"
+                                                    value="{{$data->name}}"
                                                     data-parsley-required="true"
                                                 />
                                             </div>
@@ -44,15 +43,43 @@
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="basicSelect" class="form-label"
-                                                >Parent</label
+                                                >Category</label
                                                 >
-                                                <select name="parent_id" class="form-select" id="basicSelect">
-                                                    <option value="0">No Parent</option>
-                                                    @foreach($parent_menu as $parent)
-                                                        @continue($parent->id == $menu->id)
-                                                        <option  value="{{$parent->id}}"  {{$menu->parent_id == $parent->id ? 'selected' : ""}}>{{$parent->name}}</option>
+                                                <select name="menu_id" class="form-select" id="basicSelect">
+                                                    @foreach($menus as $menu)
+                                                        <option  value="{{$menu->id}}"  {{$menu->id == $data->menu->id ? 'selected' : ""}}>{{$menu->name}}</option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 mt-3">
+                                            <div class="form-group mandatory">
+                                                <label for="price-column" class="form-label"
+                                                >Price</label>
+                                                <input
+                                                    type="number"
+                                                    id="price-column"
+                                                    class="form-control"
+                                                    placeholder="First Name"
+                                                    name="price"
+                                                    value="{{$data->price}}"
+                                                    data-parsley-required="true"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 mt-3">
+                                            <div class="form-group">
+                                                <label for="price-sale-column" class="form-label"
+                                                >Price Sale</label>
+                                                <input
+                                                    type="number"
+                                                    id="price-sale-column"
+                                                    class="form-control"
+                                                    placeholder="First Name"
+                                                    name="price_sale"
+                                                    value="{{$data->price_sale}}"
+                                                    data-parsley-required="true"
+                                                />
                                             </div>
                                         </div>
                                         <div class="col-12 mt-3">
@@ -66,7 +93,7 @@
                                                     class="form-control"
                                                     placeholder="Description"
                                                     name="description"
-                                                    value="{{$menu->description}}"
+                                                    value="{{$data->description}}"
                                                     data-parsley-required="true"
                                                 />
                                             </div>
@@ -82,9 +109,33 @@
                                                     class="form-control"
                                                     placeholder="Content"
                                                     name="content"
-                                                    value="{{$menu->content}}"
+                                                    value="{{$data->content}}"
                                                     data-parsley-required="true"
                                                 />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                            <div class="form-group mandatory">
+                                                <label for="first-name-column" class="form-label"
+                                                >Add Images</label
+                                                >
+                                                <input
+                                                    type="file"
+                                                    id="first-name-column"
+                                                    class="form-control"
+                                                    placeholder="Content"
+                                                    name="images[]"
+                                                    multiple
+                                                    accept="image/*"
+                                                    data-parsley-required="true"
+                                                />
+                                            </div>
+                                            <div class="row">
+                                                @foreach($data->images as $image)
+                                                    <div class="col-2 " id="{{$image->id}}">
+                                                        <img onclick="removeImage({{$image->id}})" class="w-100" src="{{'/storage/'.$image->thumb}}" />
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -95,14 +146,13 @@
                                                     <label class="form-label">
                                                         Status
                                                     </label>
-
                                                     <div class="form-check">
                                                         <input
                                                             class="form-check-input"
                                                             type="radio"
                                                             name="active"
                                                             value="1"
-                                                            {{$menu->active == 1? "checked":""}}
+                                                            {{$data->active == 1? "checked":""}}
                                                             id="flexRadioDefault1"
                                                         />
                                                         <label
@@ -118,7 +168,7 @@
                                                             type="radio"
                                                             name="active"
                                                             value="0"
-                                                            {{$menu->active  == 0? "checked":""}}
+                                                            {{$data->active  == 0? "checked":""}}
                                                             id="flexRadioDefault2"
                                                         />
                                                         <label
@@ -161,5 +211,32 @@
             </div>
         </section>
     </div>
+@stop
+@section('script')
+    <script>
+        const removeImage = (id) =>{
+            const token = document.querySelector('input[name="_token"]').value;
+            fetch(`http://localhost:8000/admin/images/delete/${id}`, {
+                method: 'delete',
+                headers: {
+                    "X-CSRF-Token": token
+                },
+            })
+                .then((response) =>{
+                    const status = response.status;
+                    if(status != 200)
+                        alert('Khong the xoa')
+                    else
+                        return response.json()
+                })
+                .then((data) => {
+                    if(data){
+                        let ids = document.getElementById(id);
+                        ids.remove()
+                    }
+                });
+        }
+    </script>
+
 @stop
 

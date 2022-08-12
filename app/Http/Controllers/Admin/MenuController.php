@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Menu\CreateFormRequet;
+use App\Http\Requests\Menu\CreateFormRequest;
 use App\Http\Services\Menu\MenuService;
 use Illuminate\Http\Request;
 
@@ -17,7 +17,7 @@ class MenuController extends Controller
     }
 
     public function index(){
-        $list_menu = $this->menuService->getParent();
+        $list_menu = $this->menuService->getAll();
         return view('pages.admin.menu.index',
             [
                 'title_heading'=>'Menu List',
@@ -40,7 +40,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function store(CreateFormRequet $request){
+    public function store(CreateFormRequest $request){
 
         $this->menuService->create($request);
         return redirect()->back();
@@ -63,7 +63,7 @@ class MenuController extends Controller
         ]);
     }
 
-    public function update(CreateFormRequet $request, $id){
+    public function update(CreateFormRequest $request, $id){
         $this->menuService->update($request, $id);
         return redirect()->back();
     }

@@ -4,7 +4,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html"
+                    <a href="{{route('admin.index')}}"
                     ><img src="/assets/images/logo/logo.svg" alt="Logo" srcset=""
                         /></a>
                 </div>
@@ -88,6 +88,19 @@
                     <a href="{{route('admin.menu.index')}}" class="sidebar-link">
                         <i class="bi bi-stack"></i>
                         <span>Menu List</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="{{route('admin.products.index')}}" class="sidebar-link">
+                        <i class="bi bi-stack"></i>
+                        <span>Products</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{route('admin.slider.index')}}" class="sidebar-link">
+                        <i class="bi bi-sliders"></i>
+                        <span>Slider</span>
                     </a>
                 </li>
 {{--                <li class="sidebar-item has-sub">--}}

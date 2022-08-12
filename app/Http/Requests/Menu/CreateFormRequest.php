@@ -4,7 +4,7 @@ namespace App\Http\Requests\Menu;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateFormRequet extends FormRequest
+class CreateFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
