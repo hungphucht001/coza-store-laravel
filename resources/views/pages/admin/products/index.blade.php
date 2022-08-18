@@ -19,6 +19,7 @@
                     <a href="{{route('admin.products.add')}}" class="btn btn-secondary">Add Product</a>
                 </div>
                 <div class="card-body">
+                    @if(count($data) > 0)
                     <table class="table table-striped" id="table1">
                         <thead>
                         <tr>
@@ -60,6 +61,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                    @else
+                        <p>No Products</p>
+                    @endif
                 </div>
             </div>
         </section>

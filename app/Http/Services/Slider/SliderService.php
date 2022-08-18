@@ -10,7 +10,7 @@ use Nette\Utils\DateTime;
 class SliderService
 {
     public function getAll(){
-        return Slider::paginate(15);
+        return Slider::paginate(5);
     }
     public function get($id){
         return Slider::find($id);

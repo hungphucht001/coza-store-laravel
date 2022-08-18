@@ -97,6 +97,53 @@
                                                     />
                                                 </div>
                                             </div>
+
+
+                                            <div class="col-6 mt-3">
+                                                <div class="form-group mandatory">
+                                                   <div class="d-flex justify-content-between align-items-center mb-3">
+                                                       <label for="first-name-column" class="form-label"
+                                                       >Sizes</label>
+                                                       <a id="btn-add-size" class="btn btn-primary">+</a>
+                                                   </div>
+                                                    <div id="wrap-size">
+                                                        <div class="d-flex">
+                                                            <input
+                                                                type="text"
+                                                                id="first-name-column"
+                                                                class="form-control"
+                                                                placeholder="Size"
+                                                                name="size[]"
+                                                                data-parsley-required="true"
+                                                            />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mt-3">
+                                                <div class="form-group mandatory">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <label for="first-name-column" class="form-label"
+                                                        >Colors</label>
+                                                        <a id="btn-add-color" class="btn btn-primary">+</a>
+                                                    </div>
+                                                   <div id="wrap-color">
+                                                       <div class="d-flex">
+                                                           <input
+                                                               type="text"
+                                                               id="first-name-column"
+                                                               class="form-control"
+                                                               placeholder="Color"
+                                                               name="color[]"
+                                                               data-parsley-required="true"
+                                                           />
+                                                       </div>
+                                                   </div>
+
+                                                </div>
+                                            </div>
+
                                             <div class="col-12 mt-3">
                                                 <div class="form-group mandatory">
                                                     <label for="first-name-column" class="form-label"
@@ -199,5 +246,59 @@
             </div>
         </section>
     </div>
+@stop
+
+@section('script')
+    <script>
+        const node_size = `<div class="d-flex mt-3">
+                                <input
+                                    type="text"
+                                    id="first-name-column"
+                                    class="form-control"
+                                    placeholder="Size"
+                                    name="size[]"
+                                    data-parsley-required="true"
+                                />
+                                <a class="btn btn-danger btn-remove-size"><i class="bi bi-trash"></i></a>
+                            </div>`
+        const node_color = `<div class="d-flex mt-3">
+                               <input
+                                   type="text"
+                                   id="first-name-column"
+                                   class="form-control"
+                                   placeholder="Color"
+                                   name="color[]"
+                                   data-parsley-required="true"
+                               />
+                               <a class="btn btn-danger btn-remove-color"><i class="bi bi-trash"></i></a>
+                           </div>`
+
+        const add_input = (type, node) =>{
+            const btn_add = document.getElementById(`btn-add-${type}`)
+            const wrap = document.getElementById(`wrap-${type}`)
+            btn_add.onclick = () => {
+                wrap.appendChild(htmlToElement(node))
+                const list_remove_size = document.querySelectorAll(`.btn-remove-${type}`);
+                list_remove_size.forEach((element)=>{
+                    element.addEventListener('click',()=>{
+                        element.parentNode.remove()
+                    })
+                })
+            }
+        }
+
+        add_input('size',node_size)
+        add_input('color',node_color)
+
+        function htmlToElement(html) {
+            var template = document.createElement('template');
+            html = html.trim(); // Never return a text node of whitespace as the result
+            template.innerHTML = html;
+            return template.content.firstChild;
+        }
+
+
+
+    </script>
 @stop
 

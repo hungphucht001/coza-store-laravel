@@ -2,24 +2,31 @@
 
 namespace App\Http\Services\Product;
 
+use App\Models\Color;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Nette\Utils\DateTime;
 
 class ProductService
 {
-    public function getAll(){
+    public function getAll($limit = 15){
         return Product::with('menu')->with('images')
-            ->orderByDesc('id')->paginate(15);
+            ->orderByDesc('id')->paginate($limit);
     }
     public function get($id){
         return Product::with('menu')->with('images')->find($id);
     }
 
     public function getBySlug($slug){
-        return Product::with('menu')->with('images')->where('slug', $slug)->first();
+        return Product::with('menu')
+                ->with('images')
+                ->with('sizes')
+                ->with('colors')
+                ->where('slug', $slug)
+                ->first();
     }
 
     public function softDelete($id){
@@ -91,6 +98,22 @@ class ProductService
             $product->active = $request->active;
             $product->save();
             $date = new DateTime();
+            //inset size
+            foreach ($request->size as $size){
+                Size::create([
+                    'product_id'=> (integer) $product->id,
+                    'name' => (string)$size,
+                ]);
+            }
+
+            //inset color
+            foreach ($request->color as $color){
+                Color::create([
+                    'product_id'=> (integer) $product->id,
+                    'name' => (string)$color,
+                ]);
+            }
+
             if($request->file('images')){
                 foreach ($request->file('images') as $i){
                     $name = $date->getTimestamp().'_'.$this->generateRandomString(15).'.'.$i->extension();
@@ -119,5 +142,11 @@ class ProductService
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function getByMenu($menu_id, $id, $limit = 8)
+    {
+        return Product::with('menu')->with('images')
+                ->orderByDesc('id')->where('menu_id', $menu_id)->where('id', '!=' , $id)->paginate($limit);
     }
 }

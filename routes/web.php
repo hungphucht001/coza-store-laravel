@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\ProductController as ProductClient;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\CartController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,32 +22,29 @@ use App\Http\Controllers\Admin\SliderController;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.home');
-});
+Route::get('/shoping-cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/add', [CartController::class, 'add'])->name('add');
+Route::post('/cart/get-all', [CartController::class, 'get_cart'])->name('get_cart');
+
+Route::get('/search', [PageController::class, 'search'])->name('search');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::get('/', [PageController::class, 'home'])->name('home');
 
 Route::prefix('products')->name('products.')->group(function () {
-
-    Route::get('/{slug}', [\App\Http\Controllers\ProductController::class, 'show'])->name('detail');
-    Route::get('/',[\App\Http\Controllers\ProductController::class, 'index'])->name('index');
-
+    Route::get('/{slug}', [ProductClient::class, 'show'])->name('detail');
+    Route::get('/',[ProductClient::class, 'index'])->name('index');
 });
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('post-login');
 Route::get('/storage/{filename}', function ($filename)
-{
-   return response()->file(storage_path('app/public/images/'.$filename));
-});
+{return response()->file(storage_path('app/public/images/'.$filename));});
 
 
 Route::middleware('authAdmin')->prefix('admin')->name('admin.')->group(function(){
-
-    Route::get('/', function (){
-        return view('pages.admin.dashboard');
-    })->name('index');
-
+    Route::get('/', function (){return view('pages.admin.dashboard');})->name('index');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::prefix('menu')->name('menu.')->group(function(){

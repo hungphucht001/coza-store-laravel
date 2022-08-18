@@ -251,7 +251,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row isotope-grid">
                 @if($products)
                     @foreach($products as $product)

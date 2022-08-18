@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/products/{id}', function ($id) {
+    return new \App\Http\Resources\ProductResource(Product::findOrFail($id));
+});
+Route::get('/products', [\App\Http\Controllers\ProductController::class, 'abc']);
